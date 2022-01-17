@@ -36,6 +36,14 @@ else
     # echo "::set-env name=LATEST::${LATEST}"
     echo "Latest version ${LATEST}"
 fi
+CURRENT=$(grep -E 'version \"\d+' "${SPECFILE}" | awk '{print $NF}' | tr -d '"')
+
+if [ "${CURRENT}" == "${LATEST}" ]; then
+    echo "No change in version, quitting."
+    exit 1
+else
+    echo "Version going from '${CURRENT}' to '${LATEST}'"
+fi
 
 # pull the download url from the spec file and update it
 echo "Grabbing download URL"
